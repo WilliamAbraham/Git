@@ -92,7 +92,7 @@ public class Tree {
 
     }
 
-    private String getSha(File file) {
+    public String getSha(File file) {
         String content = "";
         try {
             File myObj = file;

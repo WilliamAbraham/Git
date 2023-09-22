@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Blob",
+            "request": "launch",
+            "mainClass": "Blob",
+            "projectName": "Git_ff6f3300"
+        },
+        {
+            "type": "java",
+            "name": "CommitTester",
+            "request": "launch",
+            "mainClass": "CommitTester",
+            "projectName": "Git_ff6f3300"
+        },
+        {
+            "type": "java",
+            "name": "Tree",
+            "request": "launch",
+            "mainClass": "Tree",
+            "projectName": "Git_ff6f3300"
+        }
+    ]
+}

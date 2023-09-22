@@ -7,7 +7,7 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Index{
+public class Index {
     //initilizes Repository with an index.txt and Objects dir
     public void init(){
         File index = new File("index");
