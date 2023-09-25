@@ -3,26 +3,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Tree {
-
+    ArrayList<String> local;
     private String hash = "";
+    private String directoryHash = "";
 
-    public static void main(String[] args) throws IOException {
-        Tree t = new Tree();
-        t.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
-        t.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
-        t.add("tree : penis");
-        t.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
-        t.remove("file1.txt");
-
+    public Tree(){
+        Index toInit = new Index();
+        toInit.init();
+        local = new ArrayList<String>();
     }
 
     public String getHash() {
         return hash;
     }
 
-    public void add(String content) throws IOException {
+    public void add(String content) throws IOException {        
         File Objects = new File("objects");
         if (!Objects.exists()) {
             Objects.mkdirs();
@@ -45,7 +43,6 @@ public class Tree {
             File newFile = new File("objects/" + hash);
             oldFile.renameTo(newFile);
         }
-
     }
 
     public static String read(String filename) throws FileNotFoundException {
@@ -125,7 +122,9 @@ public class Tree {
         return true;
     }
 
-    public static void write(String fileName, byte[] content, String directory, boolean append) {
+    public void write(String fileName, byte[] content, String directory, boolean append) {
+        
+
         try {
             try (FileOutputStream fos = new FileOutputStream("Objects/" + fileName, append)) {
                 fos.write(content);
@@ -136,4 +135,47 @@ public class Tree {
         }
     }
 
+    public String addDirectory(String directory) throws IOException{
+        File test = new File(directory);
+        String toAdd = "";
+        if (!test.isDirectory()){
+            return "Input is not a directory";
+        }
+        Tree directoryBlobs = new Tree();
+        Blob blob = new Blob();
+
+        String[] files = test.list();
+
+        if (files.length == 0){
+            toAdd = "";
+            directoryBlobs.add(toAdd);
+            return directoryBlobs.getHash();   
+        }
+
+        try {
+			for (File subFile : test.listFiles()){
+                if (subFile.isDirectory()){
+                    toAdd = "Tree : " + addDirectory(subFile.toString()) + " : " + subFile.toString();
+                    directoryBlobs.add(toAdd);
+                } else {
+                    toAdd = "Blob : " + getSha(subFile) + " : " + subFile.toString();
+                    directoryBlobs.add(toAdd);
+                }
+            }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        directoryHash = directoryBlobs.getHash();
+        return directoryBlobs.getHash();   
+    }
+
+    public String getDirectoryHash(){
+        return this.directoryHash;
+    }
+
+    public static void main(String[] args) throws IOException{
+        Tree test = new Tree();
+        test.addDirectory("directory");
+    }
 }

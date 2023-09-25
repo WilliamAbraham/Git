@@ -49,7 +49,7 @@ public class Commit {
     }
 
     public void setWithoutContents() {
-        this.fileContentsWithoutThird = tree.getSha(new File("objects/" + tree.getHash()))
+        this.fileContentsWithoutThird = "objects/" + tree.getHash()
         + "\n" + shaPrevious
         + "\n" + author
         + "\n" + date

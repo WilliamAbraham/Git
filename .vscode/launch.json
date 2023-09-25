@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Tree",
+            "request": "launch",
+            "mainClass": "Tree",
+            "projectName": "Git_c23e4db3"
+        },
+        {
+            "type": "java",
+            "name": "CommitTester",
+            "request": "launch",
+            "mainClass": "CommitTester",
+            "projectName": "Git_c23e4db3"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

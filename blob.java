@@ -13,6 +13,7 @@ import java.util.zip.*;
 
 public class Blob {
     private String hash;
+    private byte[] compressedContent;
 
     public static void main(String[] args) throws IOException {
         // Index index = new Index();
@@ -46,11 +47,20 @@ public class Blob {
     // Creates a blob, which is a has of the compressed
     // contents of a given file, then writes it to objects folder
     public Blob(String fileName) throws IOException {
+        hash = hash(fileName);
+        write(hash, compressedContent, "objects");
+    }
+
+    public Blob(){
+        
+    }
+
+    public String hash(String fileName) throws IOException{
         File obj = new File(fileName);
         String content = read(obj);
-        byte[] compressedContent = compress(content);
-        hash = encryptThisString(compressedContent);
-        write(hash, compressedContent, "objects");
+        compressedContent = compress(content);
+        String methodHash = encryptThisString(compressedContent);
+        return methodHash;
     }
 
     public String getHash() {
@@ -60,7 +70,7 @@ public class Blob {
     // Returns compressed version of String
     public static byte[] compress(String str) throws IOException {
         if ((str == null) || (str.length() == 0)) {
-            return null;
+            return new byte[0];
         }
         ByteArrayOutputStream obj = new ByteArrayOutputStream();
         GZIPOutputStream gzip = new GZIPOutputStream(obj);

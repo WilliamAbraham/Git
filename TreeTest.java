@@ -1,10 +1,24 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileWriter;
+
 public class TreeTest {
+    public void deleteDirectory(String fileName){
+        File directory = new File(fileName);
+        if (!directory.exists()){
+            return;
+        }
+        for (File subFile : directory.listFiles()){
+            subFile.delete();
+        }
+        directory.delete();
+    }
 
     @Test
     public void testAdd() throws IOException {
@@ -29,6 +43,12 @@ public class TreeTest {
 
         // cleanup cause the teardown didnt work for somereason:
         Files.deleteIfExists(Paths.get("objects/" + tree.getHash()));
+
+        //Final teardown
+        File index = new File("index");
+        index.delete();
+        deleteDirectory("directory");
+        deleteDirectory("objects");
 
     }
 
@@ -56,6 +76,72 @@ public class TreeTest {
         // cleanup cause the teardown didnt work for somereason:
         Files.deleteIfExists(Paths.get("objects/" + tree.getHash()));
 
+        //Final teardown
+        File index = new File("index");
+        index.delete();
+        deleteDirectory("directory");
+        deleteDirectory("objects");
+
     }
 
+    @Test
+    public void testAddDirectoryBasic() throws IOException{
+        File directory = new File("directory");
+        directory.mkdir();
+        File subFile;
+        for (int i = 0; i < 3; i++){
+            subFile = new File("directory/subFile" + i);
+            subFile.createNewFile();
+            FileWriter myWriter = new FileWriter(subFile.toString());
+            myWriter.write("this is super FUN!!!!" + i);
+            myWriter.close();
+        }
+        
+
+        Tree test = new Tree();
+        test.addDirectory("directory");
+
+        File objectSubFile = new File("objects/d9fdb466f67c7875463e717878ee3404102f3e26");
+
+        assertTrue(objectSubFile.exists());
+
+        //Final teardown
+        File index = new File("index");
+        index.delete();
+        deleteDirectory("directory");
+        deleteDirectory("objects");
+    }
+
+    @Test
+    public void testAddDirectoryAdvanced() throws IOException{
+        File directory = new File("directory");
+        directory.mkdir();
+        File subFile;
+        for (int i = 0; i < 3; i++){
+            subFile = new File("directory/subFile" + i);
+            subFile.createNewFile();
+        }
+        File subDirectory;
+        for (int i = 0; i < 2; i++){
+            subDirectory = new File("directory/subDirectory" + i);
+            subDirectory.mkdir();
+        }
+
+        Tree test = new Tree();
+        test.addDirectory("directory");
+
+        File mainTree = new File("objects/" + test.getHash());
+        assertTrue(mainTree.exists());
+
+        //All sub trees should have sha da39a3ee5e6b4b0d3255bfef95601890afd80709 b/c they're all empty
+        File subTree = new File("objects/da39a3ee5e6b4b0d3255bfef95601890afd80709");
+
+        assertTrue(subTree.exists());
+
+        //Final teardown
+        File index = new File("index");
+        index.delete();
+        deleteDirectory("directory");
+        deleteDirectory("objects");
+    }
 }
