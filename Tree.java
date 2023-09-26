@@ -142,7 +142,6 @@ public class Tree {
             return "Input is not a directory";
         }
         Tree directoryBlobs = new Tree();
-        Blob blob = new Blob();
 
         String[] files = test.list();
 

@@ -15,6 +15,9 @@ public class TreeTest {
             return;
         }
         for (File subFile : directory.listFiles()){
+            if (subFile.isDirectory()){
+                deleteDirectory(subFile.toString());
+            }
             subFile.delete();
         }
         directory.delete();
@@ -120,23 +123,25 @@ public class TreeTest {
         for (int i = 0; i < 3; i++){
             subFile = new File("directory/subFile" + i);
             subFile.createNewFile();
+            FileWriter myWriter = new FileWriter(subFile.toString());
+            myWriter.write("this is alkjsdfhasldfja;sldfkj FUN!!!!" + i);
+            myWriter.close();
         }
         File subDirectory;
         for (int i = 0; i < 2; i++){
             subDirectory = new File("directory/subDirectory" + i);
             subDirectory.mkdir();
         }
+        File subSubFile = new File("directory/subDirectory0/peepeepoopoo");
+        FileWriter myWriter = new FileWriter(subSubFile.toString());
+            myWriter.write("it is what it is");
+            myWriter.close();
 
         Tree test = new Tree();
         test.addDirectory("directory");
 
         File mainTree = new File("objects/" + test.getHash());
         assertTrue(mainTree.exists());
-
-        //All sub trees should have sha da39a3ee5e6b4b0d3255bfef95601890afd80709 b/c they're all empty
-        File subTree = new File("objects/da39a3ee5e6b4b0d3255bfef95601890afd80709");
-
-        assertTrue(subTree.exists());
 
         //Final teardown
         File index = new File("index");
