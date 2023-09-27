@@ -133,8 +133,8 @@ public class TreeTest {
         }
         File subSubFile = new File("directory/subDirectory0/peepeepoopoo");
         FileWriter myWriter = new FileWriter(subSubFile.toString());
-            myWriter.write("it is what it is");
-            myWriter.close();
+        myWriter.write("it is what it is");
+        myWriter.close();
 
         Tree test = new Tree();
         test.addDirectory("directory");

@@ -21,6 +21,11 @@ public class Index {
     }
 
     public void add(String fileName) throws IOException{
+        File test = new File(fileName);
+        if (test.isDirectory()){
+            addDirectory(fileName);
+            return;
+        }
         //Creates a Blob of fileName that gets added to Objects
         Blob blob = new Blob(fileName);
         if (!checkIfUnique("index", fileName)) {
@@ -34,6 +39,10 @@ public class Index {
                 PrintWriter p = new PrintWriter(b);) {
             p.println(toAdd);
         }
+    }
+
+    public void addDirectory(String fileName){
+        
     }
 
     public void remove(String fileName) throws IOException{

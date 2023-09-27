@@ -19,5 +19,4 @@ public class Head {
         myWriter.write(shaString);
         myWriter.close();
     }
-
 }
