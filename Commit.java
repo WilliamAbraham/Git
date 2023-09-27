@@ -10,12 +10,11 @@ import java.util.Formatter;
 
 public class Commit {
     private String shaPrevious;
-    private String shaNext;
+    private String shaNext = "";
     private String author;
     private String date;
     private String summary;
     private Tree tree;
-    private String fileContentsWithoutThird;
     private String fileContents;
     private Date dateObj;
 
@@ -24,19 +23,19 @@ public class Commit {
         this.tree = new Tree();
         this.author = author;
         this.summary = summary;
-        createFile();
         dateObj = new Date();
         date = dateObj.toString();
+        createFile();
     }
+
     public Commit (String parent, String author, String summary) throws IOException {
         this.tree = new Tree();
         this.shaPrevious = parent;
         this.author = author;
         this.summary = summary;
-        createFile();
         dateObj = new Date();
         date = dateObj.toString();
-
+        createFile();
     }
 
     public void setContents() {
@@ -48,18 +47,9 @@ public class Commit {
         + "\n" + summary;
     }
 
-    public void setWithoutContents() {
-        this.fileContentsWithoutThird = "objects/" + tree.getHash()
-        + "\n" + shaPrevious
-        + "\n" + author
-        + "\n" + date
-        + "\n" + summary;
-    }
-
     public void createFile() throws IOException {
         setContents();
-        setWithoutContents();
-        File file = new File("objects/" + convertToSha1(fileContentsWithoutThird));
+        File file = new File("objects/" + convertToSha1(fileContents));
         if (!file.exists()) {
             file.createNewFile();
         }
@@ -73,18 +63,19 @@ public class Commit {
     }
 
     public static String convertToSha1(String fileContents) {
-    String sha1 = "";
-    try {
-        MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-        crypt.reset();
-        crypt.update(fileContents.getBytes("UTF-8"));
-        sha1 = byteToHex(crypt.digest());
-    } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
-    } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-    }
-    return sha1;
+        System.out.println(fileContents);
+        String sha1 = "";
+        try {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(fileContents.getBytes("UTF-8"));
+            sha1 = byteToHex(crypt.digest());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sha1;
     }
 
     // Used for sha1

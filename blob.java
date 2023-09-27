@@ -47,6 +47,8 @@ public class Blob {
     // Creates a blob, which is a has of the compressed
     // contents of a given file, then writes it to objects folder
     public Blob(String fileName) throws IOException {
+        Index init = new Index();
+        init.init();
         hash = hash(fileName);
         write(hash, compressedContent, "objects");
     }

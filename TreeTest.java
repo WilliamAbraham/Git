@@ -100,7 +100,6 @@ public class TreeTest {
             myWriter.close();
         }
         
-
         Tree test = new Tree();
         test.addDirectory("directory");
 
