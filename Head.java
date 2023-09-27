@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Head {
@@ -11,9 +12,12 @@ public class Head {
         }
     }
 
-    public void overWriteHead(){
-        File head = new File("head");
-        // head.
+    public void overWriteHead(String shaString) throws IOException{
+        init();
+        commitSha = shaString;
+        FileWriter myWriter = new FileWriter("head");
+        myWriter.write(shaString);
+        myWriter.close();
     }
 
 }
