@@ -16,26 +16,30 @@ public class Tree {
         local = new ArrayList<String>();
     }
 
-    public static void main(String[] args){
-
+    public static void main(String[] args) throws IOException{
+        Tree index = new Tree("index");
     }
 
-    public Tree(String index){
+    public Tree(String index) throws IOException{
         if (!index.equals("index")){
             return;
         }
-        local = new ArrayList<String>();
+        Tree test = new Tree();
         try {
             File myObj = new File("index");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                local.add(data);
+                test.add(data);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void write(){
+
     }
 
     public String getHash() {

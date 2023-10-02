@@ -25,7 +25,7 @@ public class Commit {
         toAddDirectory.init();
         toAddDirectory.add("directory");
 
-        // Commit toCommit = new Commit("a", "this is so cool");
+        Commit toCommit = new Commit("a", "this is so cool");
     }
 
     //A commit constructor takes an optional String of the SHA1 of a parent Commit, and two Strings for author and summary
