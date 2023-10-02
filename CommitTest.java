@@ -8,16 +8,16 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 public class CommitTest {
-    @AfterAll
-    static void deleteAll(){
-        File index = new File("index");
-        index.delete();
-        File objects = new File("objects");
-        for (File subfile : objects.listFiles()){
-            subfile.delete();
-        }
-        objects.delete();
-    }
+    // @AfterAll
+    // static void deleteAll(){
+    //     File index = new File("index");
+    //     index.delete();
+    //     File objects = new File("objects");
+    //     for (File subfile : objects.listFiles()){
+    //         subfile.delete();
+    //     }
+    //     objects.delete();
+    // }
 
     @Test
     void testConvertToSha1() {

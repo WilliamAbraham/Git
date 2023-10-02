@@ -41,8 +41,14 @@ public class Index {
         }
     }
 
-    public void addDirectory(String fileName){
-        
+    public void addDirectory(String fileName) throws IOException{
+        Tree directory = new Tree();
+        String sha = directory.addDirectory(fileName);
+        try (FileWriter file = new FileWriter("index", true);
+                BufferedWriter b = new BufferedWriter(file);
+                PrintWriter p = new PrintWriter(b);) {
+            p.println("Tree : " + sha + " : " + fileName);
+        }
     }
 
     public void remove(String fileName) throws IOException{
@@ -80,5 +86,11 @@ public class Index {
             }
         }
         return true;
+    }
+
+    public void clear() throws IOException{
+        File index = new File("index");
+        index.delete();
+        index.createNewFile();
     }
 }

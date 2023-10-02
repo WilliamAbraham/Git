@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,9 +8,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.Scanner;
 
 public class Commit {
-    private String shaPrevious;
+    private String shaPrevious = "";
     private String shaNext = "";
     private String author;
     private String date;
@@ -18,10 +20,20 @@ public class Commit {
     private String fileContents;
     private Date dateObj;
 
+    public static void main(String[] ags) throws IOException{
+        Index toAddDirectory = new Index();
+        toAddDirectory.init();
+        toAddDirectory.add("directory");
+
+        Commit toCommit = new Commit("a", "this is so cool");
+    }
+
     //A commit constructor takes an optional String of the SHA1 of a parent Commit, and two Strings for author and summary
     public Commit (String author, String summary) throws IOException {
-        this.tree = new Tree();
-        this.author = author;
+        Index toInit = new Index();
+        toInit.init();
+        this.tree = new Tree("index");
+        this.author = author;   
         this.summary = summary;
         dateObj = new Date();
         date = dateObj.toString();
@@ -29,7 +41,9 @@ public class Commit {
     }
 
     public Commit (String parent, String author, String summary) throws IOException {
-        this.tree = new Tree();
+        Index toInit = new Index();
+        toInit.init();
+        this.tree = new Tree("index");
         this.shaPrevious = parent;
         this.author = author;
         this.summary = summary;
@@ -39,7 +53,7 @@ public class Commit {
     }
 
     public void setContents() {
-        this.fileContents = tree.getSha(new File("objects/" + tree.getHash()))
+        this.fileContents = tree.getSha(new File("index"))
         + "\n" + shaPrevious
         + "\n" + shaNext
         + "\n" + author
@@ -63,7 +77,6 @@ public class Commit {
     }
 
     public static String convertToSha1(String fileContents) {
-        System.out.println(fileContents);
         String sha1 = "";
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
@@ -87,5 +100,14 @@ public class Commit {
         String result = formatter.toString();
         formatter.close();
         return result;
+    }
+
+    public String getCommitTree(String commitSha) throws FileNotFoundException{
+        String commitTree = "";
+        File commit = new File("objects/" + commitSha);
+        Scanner myReader = new Scanner(commit);
+        commitTree = myReader.nextLine();
+        myReader.close();
+        return commitTree;
     }
 }

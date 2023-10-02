@@ -16,6 +16,24 @@ public class Tree {
         local = new ArrayList<String>();
     }
 
+    public Tree(String index){
+        if (!index.equals("index")){
+            return;
+        }
+        local = new ArrayList<String>();
+        try {
+            File myObj = new File("index");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                local.add(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getHash() {
         return hash;
     }
@@ -31,7 +49,6 @@ public class Tree {
             }
             content = '\n' + content;
         }
-        System.out.println(content);
         // byte[] compressed = Blob.compress(content);
         if (hash == "") {
             hash = Blob.encryptThisString(content.getBytes());
@@ -123,8 +140,6 @@ public class Tree {
     }
 
     public void write(String fileName, byte[] content, String directory, boolean append) {
-        
-
         try {
             try (FileOutputStream fos = new FileOutputStream("Objects/" + fileName, append)) {
                 fos.write(content);

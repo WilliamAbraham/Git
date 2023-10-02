@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Commit",
+            "request": "launch",
+            "mainClass": "Commit",
+            "projectName": "Git_c23e4db3"
+        },
+        {
+            "type": "java",
             "name": "Tree",
             "request": "launch",
             "mainClass": "Tree",

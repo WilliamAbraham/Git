@@ -122,7 +122,6 @@ public class Blob {
             try (FileOutputStream fos = new FileOutputStream("Objects/" + fileName)) {
                 fos.write(content);
             }
-            System.out.println("Successfully wrote to " + fileName);
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
