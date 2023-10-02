@@ -16,6 +16,10 @@ public class Tree {
         local = new ArrayList<String>();
     }
 
+    public static void main(String[] args){
+
+    }
+
     public Tree(String index){
         if (!index.equals("index")){
             return;
@@ -186,10 +190,5 @@ public class Tree {
 
     public String getDirectoryHash(){
         return this.directoryHash;
-    }
-
-    public static void main(String[] args) throws IOException{
-        Tree test = new Tree();
-        test.addDirectory("directory");
     }
 }

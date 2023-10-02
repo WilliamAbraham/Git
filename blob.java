@@ -53,6 +53,15 @@ public class Blob {
         write(hash, compressedContent, "objects");
     }
 
+    public Blob(String fileName , boolean toWrite) throws IOException {
+        Index init = new Index();
+        init.init();
+        hash = hash(fileName);
+        if (toWrite == true){
+            write(hash, compressedContent, "objects");
+        }
+    }
+
     public Blob(){
         
     }

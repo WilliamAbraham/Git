@@ -27,17 +27,16 @@ public class Index {
             return;
         }
         //Creates a Blob of fileName that gets added to Objects
-        Blob blob = new Blob(fileName);
-        if (!checkIfUnique("index", fileName)) {
+        Blob blob = new Blob(fileName, false);
+        String toAdd = "Blob : " + blob.getHash() + " : " + fileName;
+        if (!checkIfUnique("index", toAdd)) {
             System.out.println("File Found");
             return;
         }
-        File f = new File(fileName);
-        String toAdd = fileName + " : " + Blob.encryptThisString(Blob.compress(Blob.read(f)));
         try (FileWriter file = new FileWriter("index", true);
                 BufferedWriter b = new BufferedWriter(file);
                 PrintWriter p = new PrintWriter(b);) {
-            p.println(toAdd);
+            p.print(toAdd);
         }
     }
 
@@ -47,7 +46,13 @@ public class Index {
         try (FileWriter file = new FileWriter("index", true);
                 BufferedWriter b = new BufferedWriter(file);
                 PrintWriter p = new PrintWriter(b);) {
-            p.println("Tree : " + sha + " : " + fileName);
+                String toAdd = "Tree : " + sha + " : " + fileName;
+                if (!checkIfUnique("index", toAdd)) {
+                    System.out.println("File Found");
+                    return;
+                } else {
+                    p.println(toAdd);
+                }
         }
     }
 
@@ -74,10 +79,8 @@ public class Index {
         boolean successful = tempFile.renameTo(inputFile);
     }
 
-    public boolean checkIfUnique(String fileToSearchIn, String fileToSearch) throws IOException{
+    public boolean checkIfUnique(String fileToSearchIn, String toSearch) throws IOException{
         Scanner scan = new Scanner(new File(fileToSearchIn));
-        File toRead = new File(fileToSearch);
-        String toSearch = fileToSearch + " : " + Blob.encryptThisString(Blob.compress(Blob.read(toRead)));
         while (scan.hasNext()) {
             String line = scan.nextLine().toString();
             System.out.println(line.equals(toSearch));
