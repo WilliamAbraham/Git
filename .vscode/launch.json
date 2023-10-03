@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Blob",
+            "request": "launch",
+            "mainClass": "Blob",
+            "projectName": "Git_c23e4db3"
+        },
+        {
+            "type": "java",
             "name": "Commit",
             "request": "launch",
             "mainClass": "Commit",

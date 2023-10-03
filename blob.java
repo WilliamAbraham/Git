@@ -15,21 +15,6 @@ public class Blob {
     private String hash;
     private byte[] compressedContent;
 
-    public static void main(String[] args) throws IOException {
-        // Index index = new Index();
-        // index.init();
-
-        // index.add("test1.txt");
-        // // index.add("test2.txt");
-        // // index.add("text3.txt");
-        // Blob blob = new Blob("test1.txt");
-        // String name = new File(".").getAbsolutePath();
-
-        // String fileName = blob.getHash();
-        // String content = decompress("./objects/" + fileName);
-
-    }
-
     public static String decompress(String path) throws FileNotFoundException, IOException {
         try (
                 FileInputStream fis = new FileInputStream(path);
@@ -98,7 +83,8 @@ public class Blob {
             byte[] messageDigest = md.digest(input);
             BigInteger no = new BigInteger(1, messageDigest);
             String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
+            System.out.println(hashtext);
+            while (hashtext.length() < 40) {
                 hashtext = "0" + hashtext;
             }
             return hashtext;

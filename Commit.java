@@ -24,7 +24,7 @@ public class Commit {
         Index toAddDirectory = new Index();
         toAddDirectory.init();
         toAddDirectory.add("directory");
-
+        
         Commit toCommit = new Commit("a", "this is so cool");
     }
 
