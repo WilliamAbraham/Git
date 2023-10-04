@@ -69,10 +69,29 @@ public class FinalCommitTests {
         deleteFiles();
     }
 
-    // @Test
-    // void twoCommit(){
-        
-    // }
+    @Test
+    public void twoCommit() throws IOException{
+        // createFiles();
+
+        // Index toAdd = new Index();
+        // toAdd.add("directory0");
+        // toAdd.add("directory1/subFile0");
+
+        // // String indexContent0;
+
+        // Commit commit0 = new Commit("William0", "test commit 0");
+
+        // toAdd.add("directory2");
+        // toAdd.add("directory1/subFile1");
+
+        // Commit commit1 = new Commit("William1", "test commit 1"); 
+
+        // Confirm tree content
+
+
+
+        deleteFiles();
+    }
 
     // @Test
     // void fourCommit(){

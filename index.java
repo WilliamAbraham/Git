@@ -33,15 +33,10 @@ public class Index {
             System.out.println("File Found");
             return;
         }
-        File index = new File("index");
         try (FileWriter file = new FileWriter("index", true);
             BufferedWriter b = new BufferedWriter(file);
             PrintWriter p = new PrintWriter(b);) {
-            if (index.length() == 0){
-                p.print(toAdd);
-            } else {
-                p.print("\n" + toAdd);
-            }  
+            p.println(toAdd);
         }
     }
 

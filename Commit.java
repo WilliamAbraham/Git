@@ -24,17 +24,6 @@ public class Commit {
     private Date dateObj;
     private String commitSha = "";
 
-    public static void main(String[] args) throws IOException{
-        Index toAddDirectory = new Index();
-        toAddDirectory.init();
-        toAddDirectory.add("directory/subDirectory0");
-
-        Commit commit1 = new Commit("William", "subDirect 0");
-
-        toAddDirectory.add("directory/subDirectory1");
-        Commit commit2 = new Commit("William", "subDirect 1");
-    }
-
     //A commit constructor takes an optional String of the SHA1 of a parent Commit, and two Strings for author and summary
     public Commit (String author, String summary) throws IOException {
         File head = new File("Head");
@@ -165,10 +154,12 @@ public class Commit {
         for (int i = 0; i < 5; i++){
             if (i == 2){
                 currentLine = commitSha;
+                writer.write(currentLine + "\n");
+                currentLine = reader.readLine();
             } else {
                 currentLine = reader.readLine();
+                writer.write(currentLine + "\n");
             }
-            writer.write(currentLine + "\n");
         }
         currentLine = reader.readLine();
         writer.write(currentLine);
@@ -177,4 +168,6 @@ public class Commit {
         reader.close();
         boolean successful = tempFile.renameTo(inputFile);
     }
+
+
 }
