@@ -92,6 +92,21 @@ public class Blob {
         }
     }
 
+    public static String encryptThisString(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 40) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // Reads a file and returns it as a String
     public static String read(File txt) {
         String content = "";
@@ -100,7 +115,6 @@ public class Blob {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                System.out.println(data);
                 content = content + data;
             }
             myReader.close();
@@ -108,6 +122,16 @@ public class Blob {
             e.printStackTrace();
         }
         return content;
+    }
+
+    public static void main(String[] args){
+        File index = new File("index");
+        String content = read(index);
+        System.out.println(content);
+
+        File blob = new File("objects/bbd8ee8a8273025ef98fb4d293d2f19e2dceb977");
+        String content0 = read(blob);
+        System.out.println(content0);
     }
 
     // Writes to given directory

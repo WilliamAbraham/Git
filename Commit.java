@@ -11,7 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Formatter;
-import java.util.Scanner;
 
 public class Commit {
     private String shaPrevious = "";
@@ -109,13 +108,8 @@ public class Commit {
         return result;
     }
 
-    public String getCommitTree(String commitSha) throws FileNotFoundException{
-        String commitTree = "";
-        File commit = new File("objects/" + commitSha);
-        Scanner myReader = new Scanner(commit);
-        commitTree = myReader.nextLine();
-        myReader.close();
-        return commitTree;
+    public String getFileContents(){
+        return fileContents;
     }
 
     public void init() throws IOException{

@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
@@ -71,23 +72,30 @@ public class FinalCommitTests {
 
     @Test
     public void twoCommit() throws IOException{
-        // createFiles();
+        createFiles();
+        File index = new File("index");
 
-        // Index toAdd = new Index();
-        // toAdd.add("directory0");
-        // toAdd.add("directory1/subFile0");
+        Index toAdd = new Index();
+        toAdd.add("directory0");
+        toAdd.add("directory1/subFile0");
 
-        // // String indexContent0;
+        String indexContent = Blob.read(index);
+        
+        Commit commit0 = new Commit("William0", "test commit 0");
+        
+        assertEquals(indexContent, "Tree : 66855061ab05f70e57bbb46ee7033e0a94c4dc0f : directory0Blob : 9567eb55822e84fd927f38e325ea730d4a1c2658 : subFile0");
 
-        // Commit commit0 = new Commit("William0", "test commit 0");
+        toAdd.add("directory2");
+        toAdd.add("directory1/subFile1");
+        String indexContent1 = Blob.read(index);
 
-        // toAdd.add("directory2");
-        // toAdd.add("directory1/subFile1");
+        indexContent = Blob.read(index);
 
-        // Commit commit1 = new Commit("William1", "test commit 1"); 
+        Commit commit1 = new Commit("William1", "test commit 1"); 
 
-        // Confirm tree content
+        assertEquals(indexContent, "Tree : 79f5565e57ca816039035d37a6a333ea68bb67ad : directory2Blob : 63cc87bc35cf08a3cad48f62168678700c3643f0 : subFile1");
 
+    
 
 
         deleteFiles();
