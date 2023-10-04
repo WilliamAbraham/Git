@@ -1,8 +1,14 @@
 import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 public class FinalCommitTests {
@@ -20,12 +26,47 @@ public class FinalCommitTests {
                 myWriter.close();
             }
         }
+    }
 
+    public void deleteFiles(){
+        File directory;
+        for (int i = 0; i < 4; i++){
+            directory = new File("directory" + i);
+            for (File file : directory.listFiles()){
+                file.delete();
+            }
+            directory.delete();
+        }
+        File objects = new File("objects");
+        for (File file : objects.listFiles()){
+            file.delete();
+        }
+        objects.delete();
+        File index = new File("index");
+        index.delete();
+        File head = new File("Head");
+        head.delete();
     }
 
     @Test
     public void oneCommit() throws IOException{
         createFiles();
+        Index toAdd = new Index();
+        toAdd.add("directory0/subFile0");
+        toAdd.add("directory0/subFile1");
+
+        Commit commit0 = new Commit("William", "test commit 0");
+
+        File commitSha = new File(commit0.getCommitSha());
+        BufferedReader readCommit = new BufferedReader(new FileReader("objects/" + commitSha));
+        String line = readCommit.readLine();
+        assertEquals(line, "7542b35579da3b3b579af48972901683aaa42cba");
+        line = readCommit.readLine();
+        assertEquals(line, "");
+        line = readCommit.readLine();
+        assertEquals(line, "");
+        readCommit.close();
+        deleteFiles();
     }
 
     // @Test

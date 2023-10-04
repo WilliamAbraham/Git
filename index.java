@@ -28,15 +28,20 @@ public class Index {
         }
         //Creates a Blob of fileName that gets added to Objects
         Blob blob = new Blob(fileName);
-        String toAdd = "Blob : " + blob.getHash() + " : " + fileName;
+        String toAdd = "Blob : " + blob.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1);
         if (!checkIfUnique("index", toAdd)) {
             System.out.println("File Found");
             return;
         }
+        File index = new File("index");
         try (FileWriter file = new FileWriter("index", true);
-                BufferedWriter b = new BufferedWriter(file);
-                PrintWriter p = new PrintWriter(b);) {
-            p.print(toAdd);
+            BufferedWriter b = new BufferedWriter(file);
+            PrintWriter p = new PrintWriter(b);) {
+            if (index.length() == 0){
+                p.print(toAdd);
+            } else {
+                p.print("\n" + toAdd);
+            }  
         }
     }
 

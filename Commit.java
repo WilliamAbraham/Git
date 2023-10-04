@@ -145,6 +145,10 @@ public class Commit {
         myWriter.close();
     }
 
+    public String getCommitSha(){
+        return commitSha;
+    }
+
     public void setNext() throws IOException{
         File head = new File("Head");
         if (!head.exists()){
