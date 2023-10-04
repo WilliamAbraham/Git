@@ -27,7 +27,7 @@ public class Index {
             return;
         }
         //Creates a Blob of fileName that gets added to Objects
-        Blob blob = new Blob(fileName, false);
+        Blob blob = new Blob(fileName);
         String toAdd = "Blob : " + blob.getHash() + " : " + fileName;
         if (!checkIfUnique("index", toAdd)) {
             System.out.println("File Found");

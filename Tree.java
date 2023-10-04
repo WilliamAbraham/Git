@@ -168,6 +168,8 @@ public class Tree {
 
         String[] files = test.list();
 
+        Blob addBlob;
+
         if (files.length == 0){
             toAdd = "";
             directoryBlobs.add(toAdd);
@@ -177,10 +179,11 @@ public class Tree {
         try {
 			for (File subFile : test.listFiles()){
                 if (subFile.isDirectory()){
-                    toAdd = "Tree : " + addDirectory(subFile.toString()) + " : " + subFile.toString();
+                    toAdd = "Tree : " + addDirectory(subFile.toString()) + " : " + subFile.toString().substring(subFile.toString().lastIndexOf("/") + 1);
                     directoryBlobs.add(toAdd);
                 } else {
-                    toAdd = "Blob : " + getSha(subFile) + " : " + subFile.toString();
+                    addBlob = new Blob(subFile.toString());
+                    toAdd = "Blob : " + addBlob.getHash() + " : " + subFile.toString().substring(subFile.toString().lastIndexOf("/") + 1);
                     directoryBlobs.add(toAdd);
                 }
             }

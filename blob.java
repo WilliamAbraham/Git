@@ -17,9 +17,9 @@ public class Blob {
 
     public static String decompress(String path) throws FileNotFoundException, IOException {
         try (
-                FileInputStream fis = new FileInputStream(path);
-                GZIPInputStream gis = new GZIPInputStream(fis);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            FileInputStream fis = new FileInputStream(path);
+            GZIPInputStream gis = new GZIPInputStream(fis);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[1024];
             int len;
             while ((len = gis.read(buffer)) != -1) {
@@ -83,7 +83,6 @@ public class Blob {
             byte[] messageDigest = md.digest(input);
             BigInteger no = new BigInteger(1, messageDigest);
             String hashtext = no.toString(16);
-            System.out.println(hashtext);
             while (hashtext.length() < 40) {
                 hashtext = "0" + hashtext;
             }

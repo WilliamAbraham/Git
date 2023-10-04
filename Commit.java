@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,17 +22,25 @@ public class Commit {
     private Tree tree;
     private String fileContents;
     private Date dateObj;
+    private String commitSha = "";
 
-    public static void main(String[] ags) throws IOException{
+    public static void main(String[] args) throws IOException{
         Index toAddDirectory = new Index();
         toAddDirectory.init();
-        toAddDirectory.add("directory");
-        
-        Commit toCommit = new Commit("a", "this is so cool");
+        toAddDirectory.add("directory/subDirectory0");
+
+        Commit commit1 = new Commit("William", "subDirect 0");
+
+        toAddDirectory.add("directory/subDirectory1");
+        Commit commit2 = new Commit("William", "subDirect 1");
     }
 
     //A commit constructor takes an optional String of the SHA1 of a parent Commit, and two Strings for author and summary
     public Commit (String author, String summary) throws IOException {
+        File head = new File("Head");
+        if (head.exists()){
+            shaPrevious = Blob.read(head);
+        }
         Index toInit = new Index();
         toInit.init();
         this.tree = new Tree("index");
@@ -38,6 +49,9 @@ public class Commit {
         dateObj = new Date();
         date = dateObj.toString();
         createFile();
+        setNext();
+        overWriteHead();
+        toInit.clear();
     }
 
     public Commit (String parent, String author, String summary) throws IOException {
@@ -50,6 +64,9 @@ public class Commit {
         dateObj = new Date();
         date = dateObj.toString();
         createFile();
+        setNext();
+        overWriteHead();
+        toInit.clear();
     }
 
     public void setContents() {
@@ -63,7 +80,8 @@ public class Commit {
 
     public void createFile() throws IOException {
         setContents();
-        File file = new File("objects/" + convertToSha1(fileContents));
+        commitSha = convertToSha1(fileContents);
+        File file = new File("objects/" + commitSha);
         if (!file.exists()) {
             file.createNewFile();
         }
@@ -109,5 +127,50 @@ public class Commit {
         commitTree = myReader.nextLine();
         myReader.close();
         return commitTree;
+    }
+
+    public void init() throws IOException{
+        File head = new File("Head");
+        if (!head.exists()){
+            head.createNewFile();
+        } else {
+            head.delete();
+            head.createNewFile();
+        }
+    }
+
+    public void overWriteHead() throws IOException{
+        FileWriter myWriter = new FileWriter("Head");
+        myWriter.write(commitSha);
+        myWriter.close();
+    }
+
+    public void setNext() throws IOException{
+        File head = new File("Head");
+        if (!head.exists()){
+            return;
+        }
+
+        File inputFile = new File("objects/" + shaPrevious);
+        File tempFile = new File("objects/myTempFile");
+
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+        String currentLine = "";
+        for (int i = 0; i < 5; i++){
+            if (i == 2){
+                currentLine = commitSha;
+            } else {
+                currentLine = reader.readLine();
+            }
+            writer.write(currentLine + "\n");
+        }
+        currentLine = reader.readLine();
+        writer.write(currentLine);
+
+        writer.close();
+        reader.close();
+        boolean successful = tempFile.renameTo(inputFile);
     }
 }
