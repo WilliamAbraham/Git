@@ -179,11 +179,11 @@ public class Tree {
         try {
 			for (File subFile : test.listFiles()){
                 if (subFile.isDirectory()){
-                    toAdd = "Tree : " + addDirectory(subFile.toString()) + " : " + subFile.toString().substring(subFile.toString().lastIndexOf("/") + 1);
+                    toAdd = "tree : " + addDirectory(subFile.toString()) + " : " + subFile.toString().substring(subFile.toString().lastIndexOf("/") + 1);
                     directoryBlobs.add(toAdd);
                 } else {
                     addBlob = new Blob(subFile.toString());
-                    toAdd = "Blob : " + addBlob.getHash() + " : " + subFile.toString().substring(subFile.toString().lastIndexOf("/") + 1);
+                    toAdd = "blob : " + addBlob.getHash() + " : " + subFile.toString().substring(subFile.toString().lastIndexOf("/") + 1);
                     directoryBlobs.add(toAdd);
                 }
             }

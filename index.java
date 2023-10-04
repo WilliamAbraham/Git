@@ -28,7 +28,7 @@ public class Index {
         }
         //Creates a Blob of fileName that gets added to Objects
         Blob blob = new Blob(fileName);
-        String toAdd = "Blob : " + blob.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1);
+        String toAdd = "blob : " + blob.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1);
         if (!checkIfUnique("index", toAdd)) {
             System.out.println("File Found");
             return;
@@ -46,7 +46,7 @@ public class Index {
         try (FileWriter file = new FileWriter("index", true);
                 BufferedWriter b = new BufferedWriter(file);
                 PrintWriter p = new PrintWriter(b);) {
-                String toAdd = "Tree : " + sha + " : " + fileName;
+                String toAdd = "tree : " + sha + " : " + fileName;
                 if (!checkIfUnique("index", toAdd)) {
                     System.out.println("File Found");
                     return;
