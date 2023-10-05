@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -163,5 +162,18 @@ public class Commit {
         boolean successful = tempFile.renameTo(inputFile);
     }
 
+    public void addTree() throws IOException{
+        if (shaPrevious.equals("")){
+            return;
+        }
+        File previousCommit = new File("objects/" + shaPrevious);
+        BufferedReader reader = new BufferedReader(new FileReader(previousCommit));
+        String previousTreeSha = reader.readLine();
+        reader.close();
 
+        File index = new File("index");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(index));
+        writer.write(previousTreeSha);
+        writer.close();
+    }
 }
