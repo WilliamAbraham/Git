@@ -30,13 +30,12 @@ public class Commit {
         }
         Index toInit = new Index();
         toInit.init();
-        this.tree = new Tree("index");
+        this.tree = new Tree("index", getPreviousTreeSha());
         this.author = author;   
         this.summary = summary;
         dateObj = new Date();
         date = dateObj.toString();
         createFile();
-        addTree();
         setNext();
         overWriteHead();
         toInit.clear();
@@ -45,21 +44,20 @@ public class Commit {
     public Commit (String parent, String author, String summary) throws IOException {
         Index toInit = new Index();
         toInit.init();
-        this.tree = new Tree("index");
+        this.tree = new Tree("index", getPreviousTreeSha());
         this.shaPrevious = parent;
         this.author = author;
         this.summary = summary;
         dateObj = new Date();
         date = dateObj.toString();
         createFile();
-        addTree();
         setNext();
         overWriteHead();
         toInit.clear();
     }
 
     public void setContents() {
-        this.fileContents = tree.getSha(new File("index"))
+        this.fileContents = this.tree.getHash()
         + "\n" + shaPrevious
         + "\n" + shaNext
         + "\n" + author
@@ -164,24 +162,14 @@ public class Commit {
         boolean successful = tempFile.renameTo(inputFile);
     }
 
-    public void addTree() throws IOException{
-        if (shaPrevious.equals("")){
-            return;
+    public String getPreviousTreeSha() throws IOException{
+        if (shaPrevious == ""){
+            return "";
         }
         File previousCommit = new File("objects/" + shaPrevious);
         BufferedReader reader = new BufferedReader(new FileReader(previousCommit));
-        String previousTreeSha = reader.readLine();
+        String previousTree = reader.readLine();
         reader.close();
-
-        File currentCommitFile = new File("objects/" + commitSha);
-        reader = new BufferedReader(new FileReader(currentCommitFile));
-        String currentTreeSha = reader.readLine();
-        reader.close();
-
-        File currentTree = new File("objects/" + currentTreeSha);
-
-        FileWriter current = new FileWriter(currentTree, true);
-        current.append("\ntree : " + previousTreeSha);
-        current.close();
+        return "tree : " + previousTree;
     }
 }

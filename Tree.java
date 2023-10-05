@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,21 +17,19 @@ public class Tree {
         local = new ArrayList<String>();
     }
 
-    public static void main(String[] args) throws IOException{
-        Tree index = new Tree("index");
-    }
-
-    public Tree(String index) throws IOException{
+    public Tree(String index, String previousTree) throws IOException{
         if (!index.equals("index")){
             return;
         }
-        Tree test = new Tree();
+        File myObj = new File("index");
         try {
-            File myObj = new File("index");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                test.add(data);
+                this.add(data);
+            }
+            if (previousTree != ""){
+                this.add(previousTree);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -43,7 +42,7 @@ public class Tree {
     }
 
     public String getHash() {
-        return hash;
+        return this.hash;
     }
 
     public void add(String content) throws IOException {        
@@ -57,7 +56,6 @@ public class Tree {
             }
             content = '\n' + content;
         }
-        // byte[] compressed = Blob.compress(content);
         if (hash == "") {
             hash = Blob.encryptThisString(content.getBytes());
             write(hash, content.getBytes(), "objects", true);
