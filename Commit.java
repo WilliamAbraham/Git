@@ -35,8 +35,8 @@ public class Commit {
         this.summary = summary;
         dateObj = new Date();
         date = dateObj.toString();
-        addTree();
         createFile();
+        addTree();
         setNext();
         overWriteHead();
         toInit.clear();
@@ -51,8 +51,8 @@ public class Commit {
         this.summary = summary;
         dateObj = new Date();
         date = dateObj.toString();
-        addTree();
         createFile();
+        addTree();
         setNext();
         overWriteHead();
         toInit.clear();
@@ -173,9 +173,15 @@ public class Commit {
         String previousTreeSha = reader.readLine();
         reader.close();
 
-        File index = new File("index");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(index));
-        writer.write("tree: " + previousTreeSha);
-        writer.close();
+        File currentCommitFile = new File("objects/" + commitSha);
+        reader = new BufferedReader(new FileReader(currentCommitFile));
+        String currentTreeSha = reader.readLine();
+        reader.close();
+
+        File currentTree = new File("objects/" + currentTreeSha);
+
+        FileWriter current = new FileWriter(currentTree, true);
+        current.append("\ntree : " + previousTreeSha);
+        current.close();
     }
 }
