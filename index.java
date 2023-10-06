@@ -64,7 +64,7 @@ public class Index {
         BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
         File toRead = new File(fileName);
-        String lineToRemove = fileName + " : " + Blob.encryptThisString(Blob.compress(Blob.read(toRead)));
+        String lineToRemove = "blob : " + Blob.encryptThisString(Blob.compress(Blob.read(toRead))) + " : " + fileName;
         String currentLine;
 
         while ((currentLine = reader.readLine()) != null) {

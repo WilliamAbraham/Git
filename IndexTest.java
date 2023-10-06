@@ -58,12 +58,12 @@ public class IndexTest {
         String indexText = Tree.read("index");
 
         String[] lineSplit = indexText.split("\\r?\\n");
-        String[] str = lineSplit[0].split("\\s+");
-        String[] str2 = lineSplit[1].split("\\s+");
+        String str = lineSplit[0];
+        String str2 = lineSplit[1];
 
         // test if the file is added to index
-        assertEquals("testBlob.txt", str[0]);
-        assertEquals("testBlob2.txt", str2[0]);
+        assertEquals("blob : 119b004b522e205f7a510ba910a8023e4fa6522f : testBlob.txt", str);
+        assertEquals("blob : 8ddc2d48c94104092b87d9aa5ba9672897633b06 : testBlob2.txt", str2);
     }
 
     @Test
@@ -77,10 +77,8 @@ public class IndexTest {
 
         String indexText = Blob.read(new File("index"));
 
-        String[] str = indexText.split("\\s+");
-
         // tests that only testBlob2 is in the index
-        assertEquals("testBlob2.txt", str[0]);
+        assertEquals("blob : 8ddc2d48c94104092b87d9aa5ba9672897633b06 : testBlob2.txt", indexText);
     }
 
     private void deleteDirectory(Path path) throws IOException {

@@ -26,6 +26,13 @@ public class BlobTest {
     @AfterEach
     public void tearDown() throws IOException {
         Files.deleteIfExists(Paths.get("testBlob.txt"));
+        File object = new File("objects");
+        for (File subFile : object.listFiles()){
+            subFile.delete();
+        }
+        object.delete();
+        File index = new File("index");
+        index.delete();
     }
 
     @Test

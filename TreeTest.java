@@ -103,7 +103,7 @@ public class TreeTest {
         Tree test = new Tree();
         test.addDirectory("directory");
 
-        File objectSubFile = new File("objects/d9fdb466f67c7875463e717878ee3404102f3e26");
+        File objectSubFile = new File("objects/423315f2b8e937a6c131784a7985395b152f6c8d");
 
         assertTrue(objectSubFile.exists());
 

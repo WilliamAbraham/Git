@@ -34,7 +34,7 @@ public class CommitTest {
     void testCreateFile() throws IOException {
         Commit test = new Commit("d360184cc304e97e95e99c5418f6b740d6382578", "William", "this is cool!");
         
-        String contentToCheck = "da39a3ee5e6b4b0d3255bfef95601890afd80709\n" + "d360184cc304e97e95e99c5418f6b740d6382578\n\n" + "William\n" + test.getDate() + "\nthis is cool!";
+        String contentToCheck = "\n" + "d360184cc304e97e95e99c5418f6b740d6382578\n\n" + "William\n" + test.getDate() + "\nthis is cool!";
 
         //test fileSha - if sha correct then thecontents correct
         File fileToTest = new File("objects/" + Commit.convertToSha1(contentToCheck));

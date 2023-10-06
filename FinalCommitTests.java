@@ -47,22 +47,22 @@ public class FinalCommitTests {
 
     @Test
     public void oneCommit() throws IOException{
-        // createFiles();
-        // Index toAdd = new Index();
-        // toAdd.add("directory0/subFile0");
-        // toAdd.add("directory0/subFile1");
+        createFiles();
+        Index toAdd = new Index();
+        toAdd.add("directory0/subFile0");
+        toAdd.add("directory0/subFile1");
 
-        // Commit commit0 = new Commit("William", "test commit 0");
+        Commit commit0 = new Commit("William", "test commit 0");
 
-        // File commitSha = new File(commit0.getCommitSha());
-        // BufferedReader readCommit = new BufferedReader(new FileReader("objects/" + commitSha));
-        // String line = readCommit.readLine();
-        // assertEquals(line, "a21c1a01468d39deaab7a846669af06cc7b77f39");
-        // line = readCommit.readLine();
-        // assertEquals(line, "");
-        // line = readCommit.readLine();
-        // assertEquals(line, "");
-        // readCommit.close();
+        File commitSha = new File(commit0.getCommitSha());
+        BufferedReader readCommit = new BufferedReader(new FileReader("objects/" + commitSha));
+        String line = readCommit.readLine();
+        assertEquals(line, "a21c1a01468d39deaab7a846669af06cc7b77f39");
+        line = readCommit.readLine();
+        assertEquals(line, "");
+        line = readCommit.readLine();
+        assertEquals(line, "");
+        readCommit.close();
        
         deleteFiles();
     }
