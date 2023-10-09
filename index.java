@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Index {
+    private boolean deleted = false;
     //initilizes Repository with an index.txt and Objects dir
     public void init(){
         File index = new File("index");
@@ -54,6 +55,29 @@ public class Index {
                     p.println(toAdd);
                 }
         }
+    }
+
+    public static void main(String[] args) throws IOException{
+        Index cool = new Index();
+        cool.add("directory0/subFile00");
+        cool.add("directory0/subFile01");
+
+        Commit one = new Commit("Will", "1");
+
+        cool.delete("directory0/subFile00");
+        cool.add("directory1/subFile10");
+
+        Commit two = new Commit("Will", "2");
+    }
+
+    public void delete(String fileName) throws IOException{
+        String deletedTree = Tree.delete(fileName);
+        File index = new File("index");
+        FileWriter writer = new FileWriter(index, true);
+        writer.append(deletedTree);
+        writer.append("*Deleted" + fileName.substring(fileName.lastIndexOf("/") + 1) + "\n");
+        writer.close();
+        this.deleted = true;
     }
 
     public void remove(String fileName) throws IOException{

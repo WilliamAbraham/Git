@@ -12,7 +12,7 @@ public class Tree {
     ArrayList<String> local;
     private String hash = "";
     private String directoryHash = "";
-    private static String fileLocation = "";
+    private String toConnect = "";
 
     public Tree(){
         Index toInit = new Index();
@@ -31,13 +31,29 @@ public class Tree {
                 String data = myReader.nextLine();
                 this.add(data);
             }
-            if (previousTree != ""){
+            if (previousTree != "" && checkForDeleted() == false){
                 this.add(previousTree);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkForDeleted() throws IOException{
+        boolean found = false;
+        File index = new File("index");
+
+        BufferedReader reader = new BufferedReader(new FileReader(index));
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null){
+            if (currentLine.length() < 8){
+                currentLine = reader.readLine();
+            } else if (currentLine.substring(0, 8).equals("*Deleted")){
+                return true;
+            }
+        }
+        return found;
     }
 
     public void write(){
@@ -69,6 +85,10 @@ public class Tree {
             File newFile = new File("objects/" + hash);
             oldFile.renameTo(newFile);
         }
+    }
+
+    public void stage(){
+
     }
 
     public static String read(String filename) throws FileNotFoundException {
@@ -204,7 +224,6 @@ public class Tree {
         Blob toSearch = new Blob(fileName, false);
 
         String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
-        System.out.println(fileToSearch);
         File head = new File("Head");
         String latestCommitSha = Blob.read(head);
 
@@ -212,10 +231,13 @@ public class Tree {
         String treeSha = reader.readLine(); 
         reader.close();
 
-        return search(treeSha, fileToSearch);
+        String cool = search(treeSha, fileToSearch);
+        System.out.println(cool);
+        return cool;
     }
 
     public static String search(String tree, String toSearch) throws IOException{
+        String toWrite = "";
         File treeToSearch = new File("objects/" + tree);
         
         BufferedReader toRead = new BufferedReader(new FileReader(treeToSearch));
@@ -223,20 +245,23 @@ public class Tree {
 
         String treeSha = tree;
         while ((currentLine = toRead.readLine()) != null){
-            System.out.println(currentLine);
-            
             if (currentLine.substring(0, 4).equals("tree")){
                 treeSha = currentLine.substring(7, 47);
-                search(treeSha, toSearch);
+                toWrite += search(treeSha, toSearch) + "\n";
+                return toWrite;
             } 
             if (currentLine.equals(toSearch)){
-                System.out.println(treeSha);
-                fileLocation = treeSha;
+                while ((currentLine = toRead.readLine()) != null){
+                    toWrite += currentLine + "\n";
+                }
+                return toWrite;
+            } else {
+                toWrite += currentLine + "\n";
             }
         }
         toRead.close();
 
-        return fileLocation;
+        return toWrite;
     }
 
     public static void main(String[] args) throws IOException{
@@ -275,14 +300,9 @@ public class Tree {
         Commit commit3 = new Commit("William", "This is commit 3");
 
         cool.add("directory3/subFile30");
-        cool.add("directory3/subFile31");
-    
+        cool.delete("directory2/subFile21");
+
         Commit commit4 = new Commit("William", "This is commit 4");
-
-        String random = delete("directory0/subFile00");
-
-        System.out.println(random);
-        
         delete();
     }
 
