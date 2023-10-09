@@ -1,6 +1,9 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ public class Tree {
     ArrayList<String> local;
     private String hash = "";
     private String directoryHash = "";
+    private static String fileLocation = "";
 
     public Tree(){
         Index toInit = new Index();
@@ -194,5 +198,111 @@ public class Tree {
 
     public String getDirectoryHash(){
         return this.directoryHash;
+    }
+    
+    public static String delete(String fileName) throws IOException{
+        Blob toSearch = new Blob(fileName, false);
+
+        String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
+        System.out.println(fileToSearch);
+        File head = new File("Head");
+        String latestCommitSha = Blob.read(head);
+
+        BufferedReader reader = new BufferedReader(new FileReader(new File("objects/" + latestCommitSha)));
+        String treeSha = reader.readLine(); 
+        reader.close();
+
+        return search(treeSha, fileToSearch);
+    }
+
+    public static String search(String tree, String toSearch) throws IOException{
+        File treeToSearch = new File("objects/" + tree);
+        
+        BufferedReader toRead = new BufferedReader(new FileReader(treeToSearch));
+        String currentLine = "";
+
+        String treeSha = tree;
+        while ((currentLine = toRead.readLine()) != null){
+            System.out.println(currentLine);
+            
+            if (currentLine.substring(0, 4).equals("tree")){
+                treeSha = currentLine.substring(7, 47);
+                search(treeSha, toSearch);
+            } 
+            if (currentLine.equals(toSearch)){
+                System.out.println(treeSha);
+                fileLocation = treeSha;
+            }
+        }
+        toRead.close();
+
+        return fileLocation;
+    }
+
+    public static void main(String[] args) throws IOException{
+        delete();
+
+        File directory;
+        File subFile;
+        FileWriter myWriter;
+        for (int i = 0; i < 6; i++){
+            directory = new File("directory" + i);
+            directory.mkdir();
+            for (int k = 0; k < 2; k++){
+                subFile = new File(directory.toString() + "/subFile" + Integer.toString(i) + Integer.toString(k));
+                myWriter = new FileWriter(subFile.toString());
+                myWriter.write(Integer.toString(i) + Integer.toString(k));
+                myWriter.close();
+            }
+        }
+
+        Index cool = new Index();
+        cool.init();
+
+        cool.add("directory0/subFile00");
+        cool.add("directory0/subFile01");
+
+        Commit commit1 = new Commit("William", "This is commit 1");
+
+        cool.add("directory1/subFile10");
+        cool.add("directory1/subFile11");
+    
+        Commit commit2 = new Commit("William", "This is commit 2");
+
+        cool.add("directory2/subFile20");
+        cool.add("directory2/subFile21");
+
+        Commit commit3 = new Commit("William", "This is commit 3");
+
+        cool.add("directory3/subFile30");
+        cool.add("directory3/subFile31");
+    
+        Commit commit4 = new Commit("William", "This is commit 4");
+
+        String random = delete("directory0/subFile00");
+
+        System.out.println(random);
+        
+        delete();
+    }
+
+    public static void delete(){
+        File directory;
+        for (int i = 0; i < 6; i++){
+            directory = new File("directory" + i);
+            for (File file : directory.listFiles()){
+                file.delete();
+            }
+            directory.delete();
+        }
+        File objects = new File("objects");
+        for (File file : objects.listFiles()){
+            file.delete();
+        }
+        objects.delete();
+        File index = new File("index");
+        index.delete();
+        File head = new File("Head");
+        head.delete();
     }
 }
