@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,7 +13,6 @@ public class Tree {
     ArrayList<String> local;
     private String hash = "";
     private String directoryHash = "";
-    private String toConnect = "";
 
     public Tree(){
         Index toInit = new Index();
@@ -26,18 +26,41 @@ public class Tree {
         }
         File myObj = new File("index");
         try {
+            boolean deleted = checkForDeleted();
+            if (deleted == true){
+                formatIndex();
+            }
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 this.add(data);
             }
-            if (previousTree != "" && checkForDeleted() == false){
+            if (previousTree != "" && deleted == false){
                 this.add(previousTree);
-            }
+            }  
             myReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void formatIndex() throws IOException{
+        File index = new File("index");
+        File tempFile = new File("tempFile");
+
+        BufferedReader reader = new BufferedReader(new FileReader(index));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null){
+            if ((currentLine.length() > 8) && (!currentLine.substring(0, 8).equals("*Deleted"))){
+                writer.append(currentLine + "\n");
+            }
+        }
+        reader.close();
+        writer.close();
+
+        tempFile.renameTo(index);
     }
 
     public boolean checkForDeleted() throws IOException{
@@ -300,7 +323,7 @@ public class Tree {
         Commit commit3 = new Commit("William", "This is commit 3");
 
         cool.add("directory3/subFile30");
-        cool.delete("directory2/subFile21");
+        cool.delete("directory0/subFile01");
 
         Commit commit4 = new Commit("William", "This is commit 4");
         delete();
