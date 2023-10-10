@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Index {
-    private boolean deleted = false;
     //initilizes Repository with an index.txt and Objects dir
     public void init(){
         File index = new File("index");
@@ -34,14 +33,37 @@ public class Index {
             System.out.println("File Found");
             return;
         }
-        try (FileWriter file = new FileWriter("index", true);
-            BufferedWriter b = new BufferedWriter(file);
-            PrintWriter p = new PrintWriter(b);) {
-            p.println(toAdd);
+        try (FileWriter file = new FileWriter("index", true)){
+            file.append(toAdd + "\n");
+        }
+
+        String toAddTree = Tree.getPreviousTree();
+        File index = new File("index");
+        File tempIndex = new File("tempIndex");
+        BufferedReader reader = new BufferedReader(new FileReader(index));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempIndex));
+        String currentLine;
+        if (toAddTree != null){
+            while ((currentLine = reader.readLine()) != null){
+                if (!currentLine.equals("tree : " + toAddTree)){
+                    writer.append(currentLine + "\n");
+                }
+            }
+                writer.append("tree : " + toAddTree + "\n");
+                reader.close();
+                writer.close();
+                tempIndex.renameTo(index);
         }
     }
 
     public void addDirectory(String fileName) throws IOException{
+        File index = new File("index");
+        if (index.length() == 0){
+            String toAdd = Tree.getPreviousTree();
+            if (toAdd != null){
+                addSimple("tree : " + toAdd);
+            }
+        }
         Tree directory = new Tree();
         String sha = directory.addDirectory(fileName);
         try (FileWriter file = new FileWriter("index", true);
@@ -59,25 +81,26 @@ public class Index {
 
     public static void main(String[] args) throws IOException{
         Index cool = new Index();
-        cool.add("directory0/subFile00");
-        cool.add("directory0/subFile01");
-
-        Commit one = new Commit("Will", "1");
-
-        cool.delete("directory0/subFile00");
-        cool.add("directory1/subFile10");
-
-        Commit two = new Commit("Will", "2");
+        // cool.add("directory4/subFile40");
+        cool.delete("directory2/subFile21");
     }
 
     public void delete(String fileName) throws IOException{
         String deletedTree = Tree.delete(fileName);
+        String[] thingsToAdd = deletedTree.split("\n");
+        for (int i = 0; i < thingsToAdd.length; i++){
+            addSimple(thingsToAdd[i]);
+        }
+        addSimple("*Deleted" + fileName.substring(fileName.lastIndexOf("/") + 1));
+    }
+
+    public void addSimple(String toAdd) throws IOException{
         File index = new File("index");
         FileWriter writer = new FileWriter(index, true);
-        writer.append(deletedTree);
-        writer.append("*Deleted" + fileName.substring(fileName.lastIndexOf("/") + 1) + "\n");
+        if (checkIfUnique("index", toAdd)){
+            writer.append(toAdd + "\n");
+        }
         writer.close();
-        this.deleted = true;
     }
 
     public void remove(String fileName) throws IOException{

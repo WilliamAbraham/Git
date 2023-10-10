@@ -35,9 +35,6 @@ public class Tree {
                 String data = myReader.nextLine();
                 this.add(data);
             }
-            if (previousTree != "" && deleted == false){
-                this.add(previousTree);
-            }  
             myReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -70,9 +67,7 @@ public class Tree {
         BufferedReader reader = new BufferedReader(new FileReader(index));
         String currentLine;
         while ((currentLine = reader.readLine()) != null){
-            if (currentLine.length() < 8){
-                currentLine = reader.readLine();
-            } else if (currentLine.substring(0, 8).equals("*Deleted")){
+            if (currentLine.contains("*Deleted")){
                 return true;
             }
         }
@@ -126,6 +121,21 @@ public class Tree {
             }
         }
         return submit;
+    }
+
+    public static String getPreviousTree() throws IOException{
+        File head = new File("Head");
+        if (!head.exists()){
+            return null;
+        }
+        BufferedReader reader = new BufferedReader(new FileReader(head));
+        String commit = reader.readLine();
+        reader.close();
+        File commitFile = new File("objects/" + commit);
+        reader = new BufferedReader(new FileReader(commitFile));
+        String tree = reader.readLine();
+        reader.close();
+        return tree;
     }
 
     public void remove(String delteFileName) throws FileNotFoundException, IOException {
@@ -244,14 +254,27 @@ public class Tree {
     }
     
     public static String delete(String fileName) throws IOException{
+        // Blob toSearch = new Blob(fileName, false);
+
+        // String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
+        // File head = new File("Head");
+        // String latestCommitSha = Blob.read(head);
+
+        // BufferedReader reader = new BufferedReader(new FileReader(new File("objects/" + latestCommitSha)));
+        // String treeSha = reader.readLine(); 
+        // reader.close();
         Blob toSearch = new Blob(fileName, false);
 
         String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
-        File head = new File("Head");
-        String latestCommitSha = Blob.read(head);
 
-        BufferedReader reader = new BufferedReader(new FileReader(new File("objects/" + latestCommitSha)));
-        String treeSha = reader.readLine(); 
+        String treeSha;
+        BufferedReader reader = new BufferedReader(new FileReader(new File("index")));
+        String currentLine;
+        if ((currentLine = reader.readLine()) == null){
+            treeSha = getPreviousTree();
+        } else {
+            treeSha = currentLine.substring(7, 47); 
+        }
         reader.close();
 
         String cool = search(treeSha, fileToSearch);
@@ -284,25 +307,27 @@ public class Tree {
         }
         toRead.close();
 
+        System.out.println(toWrite);
+
         return toWrite;
     }
 
     public static void main(String[] args) throws IOException{
         delete();
 
-        File directory;
-        File subFile;
-        FileWriter myWriter;
-        for (int i = 0; i < 6; i++){
-            directory = new File("directory" + i);
-            directory.mkdir();
-            for (int k = 0; k < 2; k++){
-                subFile = new File(directory.toString() + "/subFile" + Integer.toString(i) + Integer.toString(k));
-                myWriter = new FileWriter(subFile.toString());
-                myWriter.write(Integer.toString(i) + Integer.toString(k));
-                myWriter.close();
-            }
-        }
+        // File directory;
+        // File subFile;
+        // FileWriter myWriter;
+        // for (int i = 0; i < 6; i++){
+        //     directory = new File("directory" + i);
+        //     directory.mkdir();
+        //     for (int k = 0; k < 2; k++){
+        //         subFile = new File(directory.toString() + "/subFile" + Integer.toString(i) + Integer.toString(k));
+        //         myWriter = new FileWriter(subFile.toString());
+        //         myWriter.write(Integer.toString(i) + Integer.toString(k));
+        //         myWriter.close();
+        //     }
+        // }
 
         Index cool = new Index();
         cool.init();
@@ -323,7 +348,9 @@ public class Tree {
         Commit commit3 = new Commit("William", "This is commit 3");
 
         cool.add("directory3/subFile30");
-        cool.delete("directory0/subFile01");
+        cool.add("directory3/subFile31");
+        // cool.delete("directory1/subFile11");
+        // cool.delete("directory0/subFile01");
 
         Commit commit4 = new Commit("William", "This is commit 4");
         delete();
