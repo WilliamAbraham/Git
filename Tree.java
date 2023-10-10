@@ -254,11 +254,11 @@ public class Tree {
     }
     
     public static String delete(String fileName, String initalTree) throws IOException{
-        Blob toSearch = new Blob(fileName, false);
+        // Blob toSearch = new Blob(fileName, false);
 
-        String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
+        // String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
 
-        String cool = search(initalTree, fileToSearch);
+        String cool = search(initalTree, fileName.substring(fileName.lastIndexOf("/") + 1));
         System.out.println(cool);
         return cool;
     }
@@ -277,7 +277,7 @@ public class Tree {
                 toWrite += search("objects/" + treeSha, toSearch) + "\n";
                 return toWrite;
             } 
-            if (currentLine.equals(toSearch)){
+            if (currentLine.substring(currentLine.lastIndexOf(":") + 2).equals(toSearch)){
                 while ((currentLine = toRead.readLine()) != null){
                     toWrite += currentLine + "\n";
                 }

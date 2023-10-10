@@ -198,6 +198,6 @@ public class FinalCommitTests {
         assertEquals(line, "");
         readCommit.close();
 
-        deleteFiles();
+        // deleteFiles();
     }
 }

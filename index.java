@@ -85,8 +85,38 @@ public class Index {
         Index cool = new Index();
         // cool.add("directory4/subFile40");
 
-        cool.delete("directory0/subFile00");
-        cool.delete("directory2/subFile21");
+        // cool.delete("directory0/subFile00");
+        // cool.delete("directory2/subFile21");
+        cool.delete("directory1/subFile10");
+        cool.edit("directory2/subFile10");
+    }
+
+    public void edit(String fileName) throws IOException{
+        delete(fileName);
+
+        Blob editedFile = new Blob(fileName);
+        String toAppend = "blob : " + editedFile.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1);
+        File index = new File("index");
+        FileWriter writer1 = new FileWriter(index, true);
+        writer1.append(toAppend);
+        writer1.close();
+
+        File tempIndex = new File("tempIndex");
+        BufferedReader reader = new BufferedReader(new FileReader(index));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempIndex));
+        String tree = "";
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null){
+            if (currentLine.contains("tree :") && currentLine.length() < 48){
+                tree = currentLine;
+            } else {
+                writer.append(currentLine + "\n");
+            }
+        }
+        writer.append(tree);
+        reader.close();
+        writer.close();
+        tempIndex.renameTo(index);
     }
 
     public void delete(String fileName) throws IOException{
