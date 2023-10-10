@@ -81,17 +81,34 @@ public class Index {
 
     public static void main(String[] args) throws IOException{
         Index cool = new Index();
-        // cool.add("directory4/subFile40");
+        cool.add("directory4/subFile40");
         cool.delete("directory2/subFile21");
+        cool.delete("directory1/subFile10");
     }
 
     public void delete(String fileName) throws IOException{
         String deletedTree = Tree.delete(fileName);
         String[] thingsToAdd = deletedTree.split("\n");
+
+        File index = new File("index");
+        File tempIndex = new File("indexDelete");
+        BufferedReader reader = new BufferedReader(new FileReader(index));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempIndex));
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null){
+            if (!currentLine.substring(0, 4).equals("tree")){
+                writer.append(currentLine + "\n");
+            }
+         }
+        
+        reader.close();
+        writer.close();
+        tempIndex.renameTo(index);
+        
         for (int i = 0; i < thingsToAdd.length; i++){
             addSimple(thingsToAdd[i]);
         }
-        addSimple("*Deleted" + fileName.substring(fileName.lastIndexOf("/") + 1));
+        // addSimple("*Deleted" + fileName.substring(fileName.lastIndexOf("/") + 1));
     }
 
     public void addSimple(String toAdd) throws IOException{

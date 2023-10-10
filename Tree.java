@@ -267,24 +267,24 @@ public class Tree {
 
         String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
 
-        String treeSha;
-        BufferedReader reader = new BufferedReader(new FileReader(new File("index")));
-        String currentLine;
-        if ((currentLine = reader.readLine()) == null){
-            treeSha = getPreviousTree();
-        } else {
-            treeSha = currentLine.substring(7, 47); 
-        }
-        reader.close();
+        // String treeSha;
+        // BufferedReader reader = new BufferedReader(new FileReader(new File("index")));
+        // String currentLine;
+        // if ((currentLine = reader.readLine()) == null){
+        //     treeSha = getPreviousTree();
+        // } else {
+        //     treeSha = currentLine.substring(7, 47); 
+        // }
+        // reader.close();
 
-        String cool = search(treeSha, fileToSearch);
+        String cool = search("index", fileToSearch);
         System.out.println(cool);
         return cool;
     }
 
     public static String search(String tree, String toSearch) throws IOException{
         String toWrite = "";
-        File treeToSearch = new File("objects/" + tree);
+        File treeToSearch = new File(tree);
         
         BufferedReader toRead = new BufferedReader(new FileReader(treeToSearch));
         String currentLine = "";
@@ -293,7 +293,7 @@ public class Tree {
         while ((currentLine = toRead.readLine()) != null){
             if (currentLine.substring(0, 4).equals("tree")){
                 treeSha = currentLine.substring(7, 47);
-                toWrite += search(treeSha, toSearch) + "\n";
+                toWrite += search("objects/" + treeSha, toSearch) + "\n";
                 return toWrite;
             } 
             if (currentLine.equals(toSearch)){
@@ -313,21 +313,21 @@ public class Tree {
     }
 
     public static void main(String[] args) throws IOException{
-        delete();
+        // delete();
 
-        // File directory;
-        // File subFile;
-        // FileWriter myWriter;
-        // for (int i = 0; i < 6; i++){
-        //     directory = new File("directory" + i);
-        //     directory.mkdir();
-        //     for (int k = 0; k < 2; k++){
-        //         subFile = new File(directory.toString() + "/subFile" + Integer.toString(i) + Integer.toString(k));
-        //         myWriter = new FileWriter(subFile.toString());
-        //         myWriter.write(Integer.toString(i) + Integer.toString(k));
-        //         myWriter.close();
-        //     }
-        // }
+        File directory;
+        File subFile;
+        FileWriter myWriter;
+        for (int i = 0; i < 6; i++){
+            directory = new File("directory" + i);
+            directory.mkdir();
+            for (int k = 0; k < 2; k++){
+                subFile = new File(directory.toString() + "/subFile" + Integer.toString(i) + Integer.toString(k));
+                myWriter = new FileWriter(subFile.toString());
+                myWriter.write(Integer.toString(i) + Integer.toString(k));
+                myWriter.close();
+            }
+        }
 
         Index cool = new Index();
         cool.init();
@@ -353,7 +353,7 @@ public class Tree {
         // cool.delete("directory0/subFile01");
 
         Commit commit4 = new Commit("William", "This is commit 4");
-        delete();
+        // delete();
     }
 
     public static void delete(){
