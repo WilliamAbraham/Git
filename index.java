@@ -37,6 +37,7 @@ public class Index {
             file.append(toAdd + "\n");
         }
 
+        //This links the commit's trees
         String toAddTree = Tree.getPreviousTree();
         File index = new File("index");
         File tempIndex = new File("tempIndex");

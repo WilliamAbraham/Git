@@ -39,6 +39,9 @@ public class Commit {
         setNext();
         overWriteHead();
         toInit.clear();
+
+        File temp = new File("tempIndex");
+        temp.delete();
     }
 
     public Commit (String parent, String author, String summary) throws IOException {
@@ -54,6 +57,8 @@ public class Commit {
         setNext();
         overWriteHead();
         toInit.clear();
+        File temp = new File("tempIndex");
+        temp.delete();
     }
 
     public void setContents() {

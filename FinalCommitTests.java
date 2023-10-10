@@ -93,7 +93,7 @@ public class FinalCommitTests {
         Commit commit1 = new Commit("William1", "test commit 1"); 
 
         //test Tree contents
-        assertEquals(indexContent, "tree : 114a8595cf285bca43f52f5ec140d469c43604c8 : directory2blob : 63cc87bc35cf08a3cad48f62168678700c3643f0 : subFile1");
+        assertEquals(indexContent, "tree : 114a8595cf285bca43f52f5ec140d469c43604c8 : directory2blob : 63cc87bc35cf08a3cad48f62168678700c3643f0 : subFile1tree : dfe585f56baef5f098528b7bb96372334e6b161c");
        
         //test commit shas
         BufferedReader readCommit = new BufferedReader(new FileReader("objects/" + commit0.getCommitSha()));
@@ -141,7 +141,7 @@ public class FinalCommitTests {
         Commit commit1 = new Commit("William0", "test commit 1");
 
         //test Tree
-        assertEquals(indexContent, "tree : 17431eb266087514f8c51f90fdd240146b9fddad : directory1blob : 0f13d513e508da1f5211b481d77d9b6efc55ffff : subFile0blob : 3683906ef3550284138cc0616d065621189d0dc1 : subFile1");
+        assertEquals(indexContent, "tree : 17431eb266087514f8c51f90fdd240146b9fddad : directory1blob : 0f13d513e508da1f5211b481d77d9b6efc55ffff : subFile0blob : 3683906ef3550284138cc0616d065621189d0dc1 : subFile1tree : a21c1a01468d39deaab7a846669af06cc7b77f39");
         
         toAdd.add("directory3/subFile0");
         toAdd.add("directory3/subFile1");
@@ -150,7 +150,7 @@ public class FinalCommitTests {
         Commit commit2 = new Commit("William0", "test commit 2");
 
         //test Tree
-        assertEquals(indexContent, "blob : 9f291810d041f2498391cf573e6bff718e479165 : subFile0blob : e8fc73be476dbbfbf7a6540eb3954065f286987b : subFile1");
+        assertEquals(indexContent, "blob : 9f291810d041f2498391cf573e6bff718e479165 : subFile0blob : e8fc73be476dbbfbf7a6540eb3954065f286987b : subFile1tree : 1272fcebaed6749e2226c1fce2cbae94d2419ce7");
         
         toAdd.add("directory4");
         toAdd.add("directory5/subFile0");
@@ -160,7 +160,7 @@ public class FinalCommitTests {
         Commit commit3 = new Commit("William0", "test commit 3");
 
         //test Tree
-        assertEquals(indexContent, "tree : 86e7ecaf37021c86eea3f4b335094b128665fafe : directory4blob : 06a5b6c99b6f3a9988b1b2de7242a957f1dc502f : subFile0blob : 7a42ac5e76afd07524b885b18a43258eda2c8e7c : subFile1");
+        assertEquals(indexContent, "tree : 86e7ecaf37021c86eea3f4b335094b128665fafe : directory4blob : 06a5b6c99b6f3a9988b1b2de7242a957f1dc502f : subFile0blob : 7a42ac5e76afd07524b885b18a43258eda2c8e7c : subFile1tree : c92dadab2f4770cfb59ec99df71654a79638e8f8");
         
         //test commit shas
         BufferedReader readCommit = new BufferedReader(new FileReader("objects/" + commit0.getCommitSha()));
