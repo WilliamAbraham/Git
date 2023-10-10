@@ -92,7 +92,7 @@ public class FinalCommitTests {
         Commit commit1 = new Commit("William1", "test commit 1"); 
 
         //test Tree contents
-        //assertEquals(indexContent, "tree : 114a8595cf285bca43f52f5ec140d469c43604c8 : directory2blob : 63cc87bc35cf08a3cad48f62168678700c3643f0 : subFile1tree : dfe585f56baef5f098528b7bb96372334e6b161c");
+        assertEquals(indexContent, "tree : 114a8595cf285bca43f52f5ec140d469c43604c8 : directory2blob : 63cc87bc35cf08a3cad48f62168678700c3643f0 : subFile1tree : dfe585f56baef5f098528b7bb96372334e6b161c");
        
         //test commit shas
         BufferedReader readCommit = new BufferedReader(new FileReader("objects/" + commit0.getCommitSha()));

@@ -85,8 +85,8 @@ public class Index {
         Index cool = new Index();
         // cool.add("directory4/subFile40");
 
+        cool.delete("directory0/subFile00");
         cool.delete("directory2/subFile21");
-        // cool.delete("directory0/subFile00");
     }
 
     public void delete(String fileName) throws IOException{
@@ -129,10 +129,20 @@ public class Index {
                 addSimple(thingsToAdd[i], true);
             }
         } else {
-            for (int i = 0; i < thingsToAdd.length; i++){
-                addSimple(thingsToAdd[i], false);
-            }
+            // for (int i = 0; i < thingsToAdd.length; i++){
+            //     addSimple(thingsToAdd[i], false);
+            // }
+            addArray(thingsToAdd);
         }
+    }
+
+    public void addArray(String[] contents) throws IOException{
+        File index = new File("index");
+        FileWriter writer = new FileWriter(index);
+        for (int i = 0; i < contents.length; i++){
+            writer.write(contents[i] + "\n");
+        }
+        writer.close();
     }
 
     public static boolean deleteMoreRecentTreeCheck(String[] contents1, String[] contents2){
@@ -145,7 +155,12 @@ public class Index {
                 }
             }
         }
-        return false;
+        for (int i = 0; i < contents1.length; i++){
+            if (contents1[i].contains("tree")){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void addSimple(String toAdd, boolean append) throws IOException{
