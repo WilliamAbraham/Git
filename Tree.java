@@ -20,7 +20,7 @@ public class Tree {
         local = new ArrayList<String>();
     }
 
-    public Tree(String index, String previousTree) throws IOException{
+    public Tree(String index) throws IOException{
         if (!index.equals("index")){
             return;
         }
@@ -253,31 +253,12 @@ public class Tree {
         return this.directoryHash;
     }
     
-    public static String delete(String fileName) throws IOException{
-        // Blob toSearch = new Blob(fileName, false);
-
-        // String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
-        // File head = new File("Head");
-        // String latestCommitSha = Blob.read(head);
-
-        // BufferedReader reader = new BufferedReader(new FileReader(new File("objects/" + latestCommitSha)));
-        // String treeSha = reader.readLine(); 
-        // reader.close();
+    public static String delete(String fileName, String initalTree) throws IOException{
         Blob toSearch = new Blob(fileName, false);
 
         String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
 
-        // String treeSha;
-        // BufferedReader reader = new BufferedReader(new FileReader(new File("index")));
-        // String currentLine;
-        // if ((currentLine = reader.readLine()) == null){
-        //     treeSha = getPreviousTree();
-        // } else {
-        //     treeSha = currentLine.substring(7, 47); 
-        // }
-        // reader.close();
-
-        String cool = search("index", fileToSearch);
+        String cool = search(initalTree, fileToSearch);
         System.out.println(cool);
         return cool;
     }

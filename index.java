@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileWriter;
@@ -62,7 +63,7 @@ public class Index {
         if (index.length() == 0){
             String toAdd = Tree.getPreviousTree();
             if (toAdd != null){
-                addSimple("tree : " + toAdd);
+                addSimple("tree : " + toAdd, true);
             }
         }
         Tree directory = new Tree();
@@ -82,39 +83,74 @@ public class Index {
 
     public static void main(String[] args) throws IOException{
         Index cool = new Index();
-        cool.add("directory4/subFile40");
+        // cool.add("directory4/subFile40");
+
         cool.delete("directory2/subFile21");
-        cool.delete("directory1/subFile10");
+        // cool.delete("directory0/subFile00");
     }
 
     public void delete(String fileName) throws IOException{
-        String deletedTree = Tree.delete(fileName);
-        String[] thingsToAdd = deletedTree.split("\n");
-
         File index = new File("index");
-        File tempIndex = new File("indexDelete");
-        BufferedReader reader = new BufferedReader(new FileReader(index));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tempIndex));
-        String currentLine;
-        while ((currentLine = reader.readLine()) != null){
-            if (!currentLine.substring(0, 4).equals("tree")){
-                writer.append(currentLine + "\n");
+
+        BufferedReader readerOuter = new BufferedReader(new FileReader(index));
+        if (readerOuter.readLine() == null){
+            String deletedTree = Tree.delete(fileName, "objects/" + Tree.getPreviousTree());
+            String[] thingsToAdd = deletedTree.split("\n");
+            for (int i = 0; i < thingsToAdd.length; i++){
+                addSimple(thingsToAdd[i], true);
             }
-         }
-        
-        reader.close();
-        writer.close();
-        tempIndex.renameTo(index);
-        
-        for (int i = 0; i < thingsToAdd.length; i++){
-            addSimple(thingsToAdd[i]);
+            readerOuter.close();
+            return;
         }
-        // addSimple("*Deleted" + fileName.substring(fileName.lastIndexOf("/") + 1));
+        readerOuter.close();
+
+        String deletedTree = Tree.delete(fileName, "index");
+        String[] thingsToAdd = deletedTree.split("\n");
+    
+        String currentIndexContents = read(index);
+        String[] currentIndexContentSplit = currentIndexContents.split("\n");
+
+        if (!deleteMoreRecentTreeCheck(thingsToAdd, currentIndexContentSplit)){
+            File tempIndex = new File("indexDelete");
+            BufferedReader reader = new BufferedReader(new FileReader(index));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempIndex));
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null){
+                if (!currentLine.substring(0, 4).equals("tree")){
+                    writer.append(currentLine + "\n");
+                }
+            }
+        
+            reader.close();
+            writer.close();
+            tempIndex.renameTo(index);
+        
+            for (int i = 0; i < thingsToAdd.length; i++){
+                addSimple(thingsToAdd[i], true);
+            }
+        } else {
+            for (int i = 0; i < thingsToAdd.length; i++){
+                addSimple(thingsToAdd[i], false);
+            }
+        }
     }
 
-    public void addSimple(String toAdd) throws IOException{
+    public static boolean deleteMoreRecentTreeCheck(String[] contents1, String[] contents2){
+        for (int i = 0; i < contents1.length; i++){
+            if (contents1[i].contains("tree")){
+                for (int k = 0; k < contents2.length; k++){
+                    if (contents1[i].equals(contents2[k])){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void addSimple(String toAdd, boolean append) throws IOException{
         File index = new File("index");
-        FileWriter writer = new FileWriter(index, true);
+        FileWriter writer = new FileWriter(index, append);
         if (checkIfUnique("index", toAdd)){
             writer.append(toAdd + "\n");
         }
@@ -160,5 +196,17 @@ public class Index {
         File index = new File("index");
         index.delete();
         index.createNewFile();
+    }
+
+    public static String read(File txt) throws FileNotFoundException {
+        String content = "";
+            File myObj = txt;
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine() + "\n";
+                content = content + data;
+            }
+            myReader.close();
+        return content;
     }
 }

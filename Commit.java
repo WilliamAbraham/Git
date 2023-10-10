@@ -26,11 +26,11 @@ public class Commit {
     public Commit (String author, String summary) throws IOException {
         File head = new File("Head");
         if (head.exists()){
-            shaPrevious = Blob.read(head);
+            shaPrevious = Blob.read(head).substring(0, 40);
         }
         Index toInit = new Index();
         toInit.init();
-        this.tree = new Tree("index", getPreviousTreeSha());
+        this.tree = new Tree("index");
         this.author = author;   
         this.summary = summary;
         dateObj = new Date();
@@ -39,7 +39,6 @@ public class Commit {
         setNext();
         overWriteHead();
         toInit.clear();
-
         File temp = new File("tempIndex");
         temp.delete();
     }
@@ -47,7 +46,7 @@ public class Commit {
     public Commit (String parent, String author, String summary) throws IOException {
         Index toInit = new Index();
         toInit.init();
-        this.tree = new Tree("index", getPreviousTreeSha());
+        this.tree = new Tree("index");
         this.shaPrevious = parent;
         this.author = author;
         this.summary = summary;
