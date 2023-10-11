@@ -81,16 +81,6 @@ public class Index {
         }
     }
 
-    public static void main(String[] args) throws IOException{
-        Index cool = new Index();
-        // cool.add("directory4/subFile40");
-
-        // cool.delete("directory0/subFile00");
-        // cool.delete("directory2/subFile21");
-        cool.delete("directory1/subFile10");
-        cool.edit("directory2/subFile10");
-    }
-
     public void edit(String fileName) throws IOException{
         delete(fileName);
 
@@ -159,9 +149,6 @@ public class Index {
                 addSimple(thingsToAdd[i], true);
             }
         } else {
-            // for (int i = 0; i < thingsToAdd.length; i++){
-            //     addSimple(thingsToAdd[i], false);
-            // }
             addArray(thingsToAdd);
         }
     }

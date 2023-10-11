@@ -68,14 +68,12 @@ public class Tree {
         String currentLine;
         while ((currentLine = reader.readLine()) != null){
             if (currentLine.contains("*Deleted")){
+                reader.close();
                 return true;
             }
         }
+        reader.close();
         return found;
-    }
-
-    public void write(){
-
     }
 
     public String getHash() {
@@ -103,10 +101,6 @@ public class Tree {
             File newFile = new File("objects/" + hash);
             oldFile.renameTo(newFile);
         }
-    }
-
-    public void stage(){
-
     }
 
     public static String read(String filename) throws FileNotFoundException {
@@ -159,7 +153,6 @@ public class Tree {
         }
         keepString = keepString.trim();
 
-        // byte[] compressed = Blob.compress(keepString);
         File oldFile = new File("objects/" + hash);
         write(hash, keepString.getBytes(), "objects", false);
         hash = Blob.encryptThisString(keepString.getBytes());
@@ -271,12 +264,14 @@ public class Tree {
             if (currentLine.substring(0, 4).equals("tree")){
                 treeSha = currentLine.substring(7, 47);
                 toWrite += search("objects/" + treeSha, toSearch) + "\n";
+                toRead.close();
                 return toWrite;
             } 
             if (currentLine.substring(currentLine.lastIndexOf(":") + 2).equals(toSearch)){
                 while ((currentLine = toRead.readLine()) != null){
                     toWrite += currentLine + "\n";
                 }
+                toRead.close();
                 return toWrite;
             } else {
                 toWrite += currentLine + "\n";

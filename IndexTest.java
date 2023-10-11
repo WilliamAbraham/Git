@@ -31,6 +31,7 @@ public class IndexTest {
         Files.deleteIfExists(Paths.get("testBlob.txt"));
         Files.deleteIfExists(Paths.get("testBlob2.txt"));
         Files.deleteIfExists(Paths.get("index"));
+        Files.deleteIfExists(Paths.get("tempIndex"));
         deleteDirectory(Paths.get("objects"));
     }
 

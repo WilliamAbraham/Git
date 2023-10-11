@@ -85,7 +85,6 @@ public class FinalCommitTests {
 
         toAdd.add("directory2");
         toAdd.add("directory1/subFile1");
-        String indexContent1 = Blob.read(index);
 
         indexContent = Blob.read(index);
 
@@ -198,6 +197,6 @@ public class FinalCommitTests {
         assertEquals(line, "");
         readCommit.close();
 
-        // deleteFiles();
+        deleteFiles();
     }
 }

@@ -177,14 +177,4 @@ public class Blob {
         }
         reader.close();
     }
-
-    public static void main(String[] args) throws IOException{
-        // Index cool = new Index();
-        // cool.edit("directory1/subFile10");
-        // cool.edit("directory1/subFile11");
-
-        // Commit commit1 = new Commit("William", "This is our summary - 1");
-
-        checkOut("d720ee829333f7df3cbbc8fb09ab65b6929feb54");
-    }
 }
