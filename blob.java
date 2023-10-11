@@ -125,13 +125,8 @@ public class Blob {
     }
 
     public static void main(String[] args){
-        File index = new File("index");
-        String content = read(index);
-        System.out.println(content);
-
-        File blob = new File("objects/bbd8ee8a8273025ef98fb4d293d2f19e2dceb977");
-        String content0 = read(blob);
-        System.out.println(content0);
+        File toRead = new File("objects/e5a382efa00c047c96665089ad749ca6de4c5b34");
+        System.out.println(read(toRead));
     }
 
     // Writes to given directory

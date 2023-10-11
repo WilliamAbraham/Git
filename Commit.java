@@ -135,6 +135,10 @@ public class Commit {
         return commitSha;
     }
 
+    public String getPreviousCommit(){
+        return shaPrevious;
+    }
+
     public void setNext() throws IOException{
         File head = new File("Head");
         if (!head.exists()){
