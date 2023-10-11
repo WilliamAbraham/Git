@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FileReader;
 import java.io.BufferedReader;
-
-import org.junit.jupiter.api.AfterAll;
+import java.io.FileReader;
 import org.junit.jupiter.api.Test;
 
 public class DeleteAndEditTests {
@@ -45,6 +43,15 @@ public class DeleteAndEditTests {
         index.delete();
         File head = new File("Head");
         head.delete();
+        File toDelete;
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 2; j++){
+                toDelete = new File("subFile" + Integer.toString(i) + Integer.toString(j));
+                toDelete.delete();
+            }
+        }
+        File randomAhh = new File("subFile50");
+        randomAhh.delete();
     }
 
     @Test
@@ -95,14 +102,14 @@ public class DeleteAndEditTests {
 
         //Checks contents of tree while traversing it
         String commitSha = commit5.getCommitSha();
-        String treeOfCommit = getTree(commitSha);
+        String treeOfCommit = Tree.getTree(commitSha);
         String treeContent = Blob.read(new File("objects/" + treeOfCommit));
 
         assertEquals("blob : 9f291810d041f2498391cf573e6bff718e479165 : subFile30"+ 
                     "tree : 78b448ed1671f2f5c19fb5c86f75f3dfd2257b56", treeContent);
         
         commitSha = commit5.getPreviousCommit();
-        treeOfCommit = getTree(commitSha);
+        treeOfCommit = Tree.getTree(commitSha);
         treeContent = Blob.read(new File("objects/" + treeOfCommit));
 
         assertEquals("blob : 9f291810d041f2498391cf573e6bff718e479165 : subFile30" + 
@@ -111,7 +118,7 @@ public class DeleteAndEditTests {
                     "tree : 78b448ed1671f2f5c19fb5c86f75f3dfd2257b56", treeContent);
         
         commitSha = commit4.getPreviousCommit();
-        treeOfCommit = getTree(commitSha);
+        treeOfCommit = Tree.getTree(commitSha);
         treeContent = Blob.read(new File("objects/" + treeOfCommit));
 
         assertEquals("blob : dd9565d7ef76d6a575f427c815e954428b70cf98 : subFile20" + 
@@ -119,7 +126,7 @@ public class DeleteAndEditTests {
                     "tree : 78b448ed1671f2f5c19fb5c86f75f3dfd2257b56", treeContent);
         
         commitSha = commit3.getPreviousCommit();
-        treeOfCommit = getTree(commitSha);
+        treeOfCommit = Tree.getTree(commitSha);
         treeContent = Blob.read(new File("objects/" + treeOfCommit));
 
         assertEquals("blob : 0f13d513e508da1f5211b481d77d9b6efc55ffff : subFile20" + 
@@ -128,21 +135,39 @@ public class DeleteAndEditTests {
                     "tree : 78b448ed1671f2f5c19fb5c86f75f3dfd2257b56", treeContent);
         
         commitSha = commit2.getPreviousCommit();
-        treeOfCommit = getTree(commitSha);
+        treeOfCommit = Tree.getTree(commitSha);
         treeContent = Blob.read(new File("objects/" + treeOfCommit));
 
         assertEquals("blob : cee88b236a3f765ebe7711008dfb24fd5b9bcd6d : subFile00" + 
                     "blob : 7add34e050b507e13049a7e68888f2805d2b4e8f : subFile01" + 
                     "blob : 9567eb55822e84fd927f38e325ea730d4a1c2658 : subFile10" + 
                     "blob : 63cc87bc35cf08a3cad48f62168678700c3643f0 : subFile11", treeContent);
+        
+        //Checkout on commit 2
+        Blob.checkOut(commit3.getPreviousCommit());
+
+        recursivelyCheck(Tree.getTree(commit3.getPreviousCommit()));
         deleteFiles();
     }
 
-    public String getTree(String commitSha) throws IOException{
-        File commit = new File("objects/" + commitSha);
-        BufferedReader reader = new BufferedReader(new FileReader(commit));
-        String treeSha = reader.readLine();
+    public void recursivelyCheck(String treeSha) throws IOException{
+        File treeToRead = new File("objects/" + treeSha);
+        File toCheck;
+        BufferedReader reader = new BufferedReader(new FileReader(treeToRead));
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null){
+            if (currentLine.contains("tree :")){
+                recursivelyCheck(currentLine.substring(7, 47));
+            }
+            if (currentLine.contains ("blob :")){
+                toCheck = new File(currentLine.substring(50));
+                assertTrue(toCheck.exists());
+                String checkContents = Blob.decompress("objects/" + currentLine.substring(7, 47));
+                String actualContents = Blob.read(toCheck);
+                assertEquals(checkContents, actualContents);
+                
+            }
+        }
         reader.close();
-        return treeSha;
     }
 }

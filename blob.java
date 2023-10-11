@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.*;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
 public class Blob {
     private String hash;
@@ -124,11 +126,6 @@ public class Blob {
         return content;
     }
 
-    public static void main(String[] args){
-        File toRead = new File("objects/e5a382efa00c047c96665089ad749ca6de4c5b34");
-        System.out.println(read(toRead));
-    }
-
     // Writes to given directory
     public static void write(String fileName, byte[] content, String directory) {
         try {
@@ -152,5 +149,42 @@ public class Blob {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //Checkout writes reverted files to local path
+    public static void checkOut(String sha) throws IOException{
+        checkOutRecursion(Tree.getTree(sha));
+    }
+
+    public static void checkOutRecursion(String sha) throws IOException{
+        File tree = new File("objects/" + sha);
+        File toCreate;
+        BufferedReader reader = new BufferedReader(new FileReader(tree));;
+        FileWriter writer;
+        String currentLine;
+        while((currentLine = reader.readLine()) != null){
+            if (currentLine.contains("tree")){
+                checkOutRecursion(currentLine.substring(7, 47));
+            } 
+            if (currentLine.contains("blob")){
+                toCreate = new File(currentLine.substring(50));
+                toCreate.createNewFile();
+                String contentToWrite = decompress("objects/" + currentLine.substring(7, 47));
+                writer = new FileWriter(toCreate);
+                writer.append(contentToWrite);
+                writer.close();
+            }
+        }
+        reader.close();
+    }
+
+    public static void main(String[] args) throws IOException{
+        // Index cool = new Index();
+        // cool.edit("directory1/subFile10");
+        // cool.edit("directory1/subFile11");
+
+        // Commit commit1 = new Commit("William", "This is our summary - 1");
+
+        checkOut("d720ee829333f7df3cbbc8fb09ab65b6929feb54");
     }
 }

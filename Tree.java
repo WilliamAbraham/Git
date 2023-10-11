@@ -254,10 +254,6 @@ public class Tree {
     }
     
     public static String delete(String fileName, String initalTree) throws IOException{
-        // Blob toSearch = new Blob(fileName, false);
-
-        // String fileToSearch = "blob : " + toSearch.getHash() + " : " + fileName.substring(fileName.lastIndexOf("/") + 1); 
-
         String cool = search(initalTree, fileName.substring(fileName.lastIndexOf("/") + 1));
         System.out.println(cool);
         return cool;
@@ -293,48 +289,12 @@ public class Tree {
         return toWrite;
     }
 
-    public static void main(String[] args) throws IOException{
-        // delete();
-
-        File directory;
-        File subFile;
-        FileWriter myWriter;
-        for (int i = 0; i < 6; i++){
-            directory = new File("directory" + i);
-            directory.mkdir();
-            for (int k = 0; k < 2; k++){
-                subFile = new File(directory.toString() + "/subFile" + Integer.toString(i) + Integer.toString(k));
-                myWriter = new FileWriter(subFile.toString());
-                myWriter.write(Integer.toString(i) + Integer.toString(k));
-                myWriter.close();
-            }
-        }
-
-        Index cool = new Index();
-        cool.init();
-
-        cool.add("directory0/subFile00");
-        cool.add("directory0/subFile01");
-
-        Commit commit1 = new Commit("William", "This is commit 1");
-
-        cool.add("directory1/subFile10");
-        cool.add("directory1/subFile11");
-    
-        Commit commit2 = new Commit("William", "This is commit 2");
-
-        cool.add("directory2/subFile20");
-        cool.add("directory2/subFile21");
-
-        Commit commit3 = new Commit("William", "This is commit 3");
-
-        cool.add("directory3/subFile30");
-        cool.add("directory3/subFile31");
-        // cool.delete("directory1/subFile11");
-        // cool.delete("directory0/subFile01");
-
-        Commit commit4 = new Commit("William", "This is commit 4");
-        // delete();
+    public static String getTree(String commitSha) throws IOException{
+        File commit = new File("objects/" + commitSha);
+        BufferedReader reader = new BufferedReader(new FileReader(commit));
+        String treeSha = reader.readLine();
+        reader.close();
+        return treeSha;
     }
 
     public static void delete(){
